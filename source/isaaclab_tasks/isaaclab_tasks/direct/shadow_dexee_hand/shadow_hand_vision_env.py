@@ -32,7 +32,7 @@ from .shadow_hand_env_cfg import ShadowHandEnvCfg
 @configclass
 class ShadowHandVisionEnvCfg(ShadowHandEnvCfg):
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=100, env_spacing=2.0, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=1225, env_spacing=2.0, replicate_physics=True)
 
     # camera
     tiled_camera: TiledCameraCfg = TiledCameraCfg(
@@ -45,8 +45,8 @@ class ShadowHandVisionEnvCfg(ShadowHandEnvCfg):
         width=120,
         height=120,
     )
-    feature_extractor = FeatureExtractorCfg(write_image_to_file=True)
-    # feature_extractor = FeatureExtractorCfg()
+    # feature_extractor = FeatureExtractorCfg(write_image_to_file=True)
+    feature_extractor = FeatureExtractorCfg()
 
     # env
     observation_space = 106 + 27  # state observation + vision CNN embedding
