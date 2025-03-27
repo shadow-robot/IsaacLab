@@ -62,18 +62,18 @@ class EventCfg:
             "distribution": "gaussian",
         },
     )
-    robot_tendon_properties = EventTerm(
-        func=mdp.randomize_fixed_tendon_parameters,
-        min_step_count_between_reset=720,
-        mode="reset",
-        params={
-            "asset_cfg": SceneEntityCfg("robot", fixed_tendon_names=".*"),
-            "stiffness_distribution_params": (0.75, 1.5),
-            "damping_distribution_params": (0.3, 3.0),
-            "operation": "scale",
-            "distribution": "log_uniform",
-        },
-    )
+    # robot_tendon_properties = EventTerm(
+    #     func=mdp.randomize_fixed_tendon_parameters,
+    #     min_step_count_between_reset=720,
+    #     mode="reset",
+    #     params={
+    #         "asset_cfg": SceneEntityCfg("robot", fixed_tendon_names=".*"),
+    #         "stiffness_distribution_params": (0.75, 1.5),
+    #         "damping_distribution_params": (0.3, 3.0),
+    #         "operation": "scale",
+    #         "distribution": "log_uniform",
+    #     },
+    # )
 
     # -- object
     object_physics_material = EventTerm(
@@ -142,7 +142,11 @@ class ShadowHandEnvCfg(DirectRLEnvCfg):
         init_state=ArticulationCfg.InitialStateCfg(
             pos=(0.0, 0.0, 0.5),
             rot=(1.0, 0.0, 0.0, 0.0),
-            joint_pos={".*": 0.0},
+            # joint_pos={".*": 0.0},
+            joint_pos={
+                "F(0|1|2)_J(0|2|3)": 0.0,
+                "F(0|1|2)_J1": -1.1,
+            },
         )
     )
     actuated_joint_names = [
@@ -182,7 +186,7 @@ class ShadowHandEnvCfg(DirectRLEnvCfg):
             ),
             mass_props=sim_utils.MassPropertiesCfg(density=567.0),
         ),
-        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 0.85), rot=(1.0, 0.0, 0.0, 0.0)),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, 0.0, 1.0), rot=(1.0, 0.0, 0.0, 0.0)),
     )
     # goal object
     goal_object_cfg: VisualizationMarkersCfg = VisualizationMarkersCfg(
@@ -195,7 +199,7 @@ class ShadowHandEnvCfg(DirectRLEnvCfg):
         },
     )
     # scene
-    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=8192, env_spacing=0.75, replicate_physics=True)
+    scene: InteractiveSceneCfg = InteractiveSceneCfg(num_envs=4096, env_spacing=0.75, replicate_physics=True)
 
     # reset
     reset_position_noise = 0.01  # range of position at reset
@@ -224,7 +228,7 @@ class ShadowHandOpenAIEnvCfg(ShadowHandEnvCfg):
     episode_length_s = 8.0
     action_space = 12
     observation_space = 28
-    state_space = 187
+    state_space = 117
     asymmetric_obs = True
     obs_type = "openai"
     # simulation
