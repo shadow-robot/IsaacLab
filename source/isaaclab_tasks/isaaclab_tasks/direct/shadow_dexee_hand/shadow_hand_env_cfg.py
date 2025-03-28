@@ -275,3 +275,49 @@ class ShadowHandOpenAIEnvCfg(ShadowHandEnvCfg):
         noise_cfg=GaussianNoiseCfg(mean=0.0, std=0.002, operation="add"),
         bias_noise_cfg=GaussianNoiseCfg(mean=0.0, std=0.0001, operation="abs"),
     )
+
+@configclass
+class ShadowDexeeHorizontalOpenAIEnvCfg(ShadowHandOpenAIEnvCfg):
+    # env
+    episode_length_s = 16.0
+    # robot
+    robot_cfg: ArticulationCfg = SHADOW_DEXEE_HAND_CFG.replace(prim_path="/World/envs/env_.*/Robot").replace(
+        init_state=ArticulationCfg.InitialStateCfg(
+            pos=(0.0, 0.0, 0.5),
+            rot=(0.9238, 0.3826, 0.0, 0.0),
+            # joint_pos={".*": 0.0},
+            joint_pos={
+                "F(1|2)_J(0|2|3)": 0.0,
+                "F(1|2)_J1": -1.0,
+                "F0_J3": -0.5229,
+                "F0_J0": 0.0,
+                "F0_J1": -1.3,
+                "F0_J2": 0.0,
+            },
+        )
+    )
+
+    # in-hand object
+    object_cfg: RigidObjectCfg = RigidObjectCfg(
+        prim_path="/World/envs/env_.*/object",
+        spawn=sim_utils.UsdFileCfg(
+            usd_path=f"{ISAAC_NUCLEUS_DIR}/Props/Blocks/DexCube/dex_cube_instanceable.usd",
+            rigid_props=sim_utils.RigidBodyPropertiesCfg(
+                kinematic_enabled=False,
+                disable_gravity=False,
+                enable_gyroscopic_forces=True,
+                solver_position_iteration_count=8,
+                solver_velocity_iteration_count=0,
+                sleep_threshold=0.005,
+                stabilization_threshold=0.0025,
+                max_depenetration_velocity=1000.0,
+            ),
+            mass_props=sim_utils.MassPropertiesCfg(density=567.0),
+        ),
+        init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, -0.18, 0.76), rot=(1.0, 0.0, 0.0, 0.0)),
+    )
+
+    reset_dof_pos_noise = 0.1  # range of dof pos at reset
+
+    # reward scales
+    dist_reward_scale = 0.0
