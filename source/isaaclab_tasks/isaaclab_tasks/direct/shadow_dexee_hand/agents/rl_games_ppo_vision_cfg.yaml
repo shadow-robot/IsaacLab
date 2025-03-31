@@ -42,7 +42,7 @@ params:
   load_path: '' # path to the checkpoint to load
 
   config:
-    name: shadow_hand_vision
+    name: shadow_dexee_vision
     env_name: rlgpu
     device: 'cuda:0'
     device_name: 'cuda:0'

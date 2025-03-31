@@ -13,7 +13,7 @@ class ShadowHandPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 10000
     save_interval = 250
-    experiment_name = "shadow_hand"
+    experiment_name = "shadow_dexee"
     empirical_normalization = True
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
@@ -42,7 +42,7 @@ class ShadowHandAsymFFPPORunnerCfg(RslRlOnPolicyRunnerCfg):
     num_steps_per_env = 16
     max_iterations = 10000
     save_interval = 250
-    experiment_name = "shadow_hand_openai_ff"
+    experiment_name = "shadow_dexee_openai_ff"
     empirical_normalization = True
     policy = RslRlPpoActorCriticCfg(
         init_noise_std=1.0,
