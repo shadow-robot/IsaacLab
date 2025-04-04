@@ -92,6 +92,7 @@ class InHandManipulationEnv(DirectRLEnv):
         light_cfg.func("/World/Light", light_cfg)
 
     def _pre_physics_step(self, actions: torch.Tensor) -> None:
+        self.actions_increment = actions.clone() - self.actions.detach()
         self.actions = actions.clone()
 
     def _apply_action(self) -> None:
@@ -124,6 +125,8 @@ class InHandManipulationEnv(DirectRLEnv):
 
         if self.cfg.obs_type == "openai":
             obs = self.compute_reduced_observations()
+        elif self.cfg.obs_type == "dexee":
+            obs = self.compute_dexee_observations()
         elif self.cfg.obs_type == "full":
             obs = self.compute_full_observations()
         else:
@@ -156,7 +159,7 @@ class InHandManipulationEnv(DirectRLEnv):
             self.cfg.dist_reward_scale,
             self.cfg.rot_reward_scale,
             self.cfg.rot_eps,
-            self.actions,
+            self.actions_increment,
             self.cfg.action_penalty_scale,
             self.cfg.success_tolerance,
             self.cfg.reach_goal_bonus,
@@ -290,6 +293,22 @@ class InHandManipulationEnv(DirectRLEnv):
                 self.object_pos,
                 quat_mul(self.object_rot, quat_conjugate(self.goal_rot)),
                 self.actions,
+            ),
+            dim=-1,
+        )
+
+        return obs
+
+    def compute_dexee_observations(self):
+        # Add the observation that are available to a pysical Shadow Dexee hand
+        obs = torch.cat(
+            (
+                self.fingertip_pos.view(self.num_envs, self.num_fingertips * 3),
+                self.object_pos,
+                quat_mul(self.object_rot, quat_conjugate(self.goal_rot)),
+                self.actions,
+                # self.hand.ssget_measured_joint_efforts(joint_indices=self.actuated_dof_indices).view(self.num_envs, -1),
+                self.hand.root_physx_view.get_dof_projected_joint_forces(),
             ),
             dim=-1,
         )

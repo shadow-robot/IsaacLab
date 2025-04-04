@@ -33,9 +33,10 @@ class EventCfg:
         params={
             "asset_cfg": SceneEntityCfg("robot"),
             "static_friction_range": (0.7, 1.3),
-            "dynamic_friction_range": (1.0, 1.0),
-            "restitution_range": (1.0, 1.0),
+            "dynamic_friction_range": (0.5, 1.0),
+            "restitution_range": (0.1, 0.8),
             "num_buckets": 250,
+            "make_consistent": True
         },
     )
     robot_joint_stiffness_and_damping = EventTerm(
@@ -50,7 +51,7 @@ class EventCfg:
             "distribution": "log_uniform",
         },
     )
-    robot_joint_limits = EventTerm(
+    robot_joint_pos_limits = EventTerm(
         func=mdp.randomize_joint_parameters,
         min_step_count_between_reset=720,
         mode="reset",
@@ -83,9 +84,10 @@ class EventCfg:
         params={
             "asset_cfg": SceneEntityCfg("object"),
             "static_friction_range": (0.7, 1.3),
-            "dynamic_friction_range": (1.0, 1.0),
-            "restitution_range": (1.0, 1.0),
+            "dynamic_friction_range": (0.5, 1.0),
+            "restitution_range": (0.1, 1.0),
             "num_buckets": 250,
+            "make_consistent": True
         },
     )
     object_scale_mass = EventTerm(
@@ -317,6 +319,19 @@ class ShadowDexeeHorizontalOpenAIEnvCfg(ShadowHandOpenAIEnvCfg):
         init_state=RigidObjectCfg.InitialStateCfg(pos=(0.0, -0.18, 0.76), rot=(1.0, 0.0, 0.0, 0.0)),
     )
 
+    reset_dof_pos_noise = 0.1  # range of dof pos at reset
+
+    # reward scales
+    dist_reward_scale = 0.0
+
+@configclass
+class ShadowDexeeVerticalDexObsEnvCfg(ShadowHandOpenAIEnvCfg):
+    # env
+    episode_length_s = 16.0
+    observation_space = 40
+    obs_type = "dexee"
+
+    # robot
     reset_dof_pos_noise = 0.1  # range of dof pos at reset
 
     # reward scales

@@ -47,7 +47,7 @@ gym.register(
     disable_env_checker=True,
     kwargs={
         "env_cfg_entry_point": f"{__name__}.shadow_hand_env_cfg:ShadowHandOpenAIEnvCfg",
-        "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_lstm_cfg.yaml",
+        "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_lstm_vertical_cfg.yaml",
     },
 )
 
@@ -70,6 +70,16 @@ gym.register(
     kwargs={
         "env_cfg_entry_point": f"{__name__}.shadow_hand_env_cfg:ShadowDexeeHorizontalOpenAIEnvCfg",
         "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_lstm_cfg.yaml",
+    },
+)
+
+gym.register(
+    id="Isaac-Repose-Cube-Shadow-Dexee-Vertical-DexObs-LSTM-Direct-v0",
+    entry_point=f"{inhand_task_entry}.inhand_manipulation_env:InHandManipulationEnv",
+    disable_env_checker=True,
+    kwargs={
+        "env_cfg_entry_point": f"{__name__}.shadow_hand_env_cfg:ShadowDexeeVerticalDexObsEnvCfg",
+        "rl_games_cfg_entry_point": f"{agents.__name__}:rl_games_ppo_lstm_vertical_dex_obs_cfg.yaml",
     },
 )
 
