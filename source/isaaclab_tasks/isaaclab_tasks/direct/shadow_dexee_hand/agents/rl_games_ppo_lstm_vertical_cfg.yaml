@@ -48,7 +48,7 @@ params:
   load_path: '' # path to the checkpoint to load
 
   config:
-    name: shadow_dexee_openai_lstm_vertical_dex_obs
+    name: shadow_dexee_openai_lstm_vertical
     env_name: rlgpu
     device: 'cuda:0'
     device_name: 'cuda:0'
@@ -68,7 +68,7 @@ params:
     schedule_type: standard
     kl_threshold: 0.016
     score_to_win: 100000
-    max_epochs: 10000
+    max_epochs: 50000
     save_best_after: 100
     save_frequency: 200
     print_stats: True

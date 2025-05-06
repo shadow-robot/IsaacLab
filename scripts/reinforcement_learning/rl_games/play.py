@@ -152,7 +152,9 @@ def main():
     agent.restore(resume_path)
     agent.reset()
 
-    dt = env.unwrapped.physics_dt
+    print(f"[INFO]: physics dt: {env.unwrapped.physics_dt}")
+    dt = env.unwrapped.physics_dt * 3
+    print(f"[INFO]: physics dt: {dt}")
 
     # reset environment
     obs = env.reset()
